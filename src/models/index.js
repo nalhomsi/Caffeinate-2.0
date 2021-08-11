@@ -13,4 +13,4 @@ module.exports = {
     Review,
     Shop,
     User,
-}
+};
