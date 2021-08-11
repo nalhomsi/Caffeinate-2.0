@@ -9,7 +9,7 @@ require("./auth/passport");
 require("./models/user");
 
 const middlewares = require('./middlewares');
-const api = require('./api');
+const api = require('./routes');
 
 const app = express();
 

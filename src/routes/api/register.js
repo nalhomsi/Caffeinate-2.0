@@ -14,7 +14,7 @@ router.post("/register", async (req, res) => {
 
     // If the username or email is already being used, return with message
     if (alreadyExistsUser) {
-        return res.json({ message: "User with email already exists!" });
+        return res.status(400).json({ message: "User with email already exists!" });
     };
 
     // Create new user
