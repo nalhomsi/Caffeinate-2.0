@@ -27,6 +27,10 @@ User.init(
         hashedPassword: {
             type: DataTypes.STRING(64),
             allowNull: false,
+        },
+        // refreshToken
+        refreshToken: {
+            type: DataTypes.STRING
         }
     },
     {

@@ -8,10 +8,10 @@ passport.use(
   new StrategyJwt(
     {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: process.env.JWT_SEC,
+      secretOrKey: process.env.ACCESS_TOKEN_SECRET,
     },
     function (jwtPayload, done) {
-      return User.findOne({ where: { id: jwtPayload.id } })
+      return User.findOne({ where: { username: jwtPayload.username } })
         .then((user) => {
           return done(null, user);
         })
