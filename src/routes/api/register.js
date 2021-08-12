@@ -4,6 +4,7 @@ const { User } = require("../../models");
 
 const router = express.Router();
 
+// Route used to register a user for the first time
 router.post("/register", async (req, res) => {
     const { username, email, password } = req.body;
     const saltRounds = 10;

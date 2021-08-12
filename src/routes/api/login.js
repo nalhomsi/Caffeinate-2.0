@@ -40,7 +40,7 @@ router.post("/login", async (req, res) => {
             userWithEmail.save();
 
             
-            res.json({ 
+            res.status(200).json({ 
                 message: "Successfully signed in",
                 id: userWithEmail.id,
                 accessToken: accessToken,
@@ -54,6 +54,7 @@ router.post("/login", async (req, res) => {
     })
 });
 
+// Validate user authentication test
 router.get("/test", passport.authenticate('jwt', { session: false }), (req, res) => {
     res.status(200).json({ message: "Authorized" }).send();
 })
