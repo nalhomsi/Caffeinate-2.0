@@ -2,6 +2,8 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const { User } = require('../../models/index');
 const jwt = require("jsonwebtoken");
+const passport = require("passport");
+require('../../auth/passport')(passport);
 
 const router = express.Router();
 
@@ -22,13 +24,13 @@ router.post("/login", async (req, res) => {
     bcrypt.compare(password, userWithEmail.hashedPassword, function(err, result) {
         if (result == true) {
             // Create access token
-            const accessToken = jwt.sign({ username: userWithEmail.username, email: userWithEmail.email }, process.env.ACCESS_TOKEN_SECRET, {
+            const accessToken = jwt.sign({ id: userWithEmail.id }, process.env.ACCESS_TOKEN_SECRET, {
                 algorithm: "HS256",
                 expiresIn: process.env.ACCESS_TOKEN_LIFE
             });
 
             // Create refresh token
-            const refreshToken = jwt.sign({ username: userWithEmail.username, email: userWithEmail.email }, process.env.REFRESH_TOKEN_SECRET, {
+            const refreshToken = jwt.sign({ id: userWithEmail.id }, process.env.REFRESH_TOKEN_SECRET, {
                 algorithm: "HS256",
                 expiresIn: process.env.REFRESH_TOKEN_LIFE
             });
@@ -37,9 +39,13 @@ router.post("/login", async (req, res) => {
             userWithEmail.refreshToken = refreshToken;
             userWithEmail.save();
 
-            // Send access token to client inside cookie
-            res.cookie("jwt", accessToken, {secure: true, httpOnly: true});
-            res.json({ message: "Successfully signed in" }).send()
+            
+            res.json({ 
+                message: "Successfully signed in",
+                id: userWithEmail.id,
+                accessToken: accessToken,
+                refreshToken: refreshToken
+             }).send()
         }
         else {
             // Passwords do not match
@@ -47,5 +53,9 @@ router.post("/login", async (req, res) => {
         }
     })
 });
+
+router.get("/test", passport.authenticate('jwt', { session: false }), (req, res) => {
+    res.status(200).json({ message: "Authorized" }).send();
+})
 
 module.exports = router;
