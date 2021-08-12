@@ -1,13 +1,12 @@
 const express = require('express');
-const passport = require('passport');
 const registerApi = require("./api/register");
 const loginApi = require("./api/login");
-const testApi = require("./api/auth-api-test")
+const authApi = require("./api/auth-api")
 
 const router = express.Router();
 
 router.use(registerApi);
 router.use(loginApi);
-router.use(testApi);
+router.use(authApi);
 
 module.exports = router;
