@@ -1,8 +1,9 @@
 const express = require('express');
 const { Review, Shop, User } = require('../../models/index');
 const router = express.Router();
-const { QueryTypes, Sequelize } = require('sequelize');
-const sequelize = require('../../config/connection');
+const passport = require('passport');
+require('../../auth/passport')(passport);
+const { Op } = require('sequelize');
 
 // Get all Reviews
 router.get('/', (req, res) => {
@@ -17,7 +18,7 @@ router.get('/', (req, res) => {
 			{
 				model: Shop,
 				as: 'Shop',
-				attributes: ['name', 'address', 'website'],
+				attributes: ['shopId', 'name', 'address', 'website'],
 			},
 		],
 	})
@@ -56,4 +57,38 @@ router.get('/:username', (req, res) => {
 		});
 });
 
+// Post Review
+router.post(
+	'/post',
+	passport.authenticate('jwt', { session: false }),
+	async (req, res) => {
+		const userRating = req.body.rating;
+		const postBody = req.body.body;
+		const shopId = req.body.shopId;
+		const userId = req.user.userId;
+
+		const review = {
+			rating: userRating,
+			body: postBody,
+			userId: userId,
+			shopId: shopId,
+		};
+
+		const existingReview = await Review.findOne({
+			where: {
+				[Op.and]: [{ userId: userId }, { shopId: shopId }],
+			},
+		});
+
+		if (!existingReview) {
+			const newPost = await Review.create(review).catch((err) => {
+				console.log(err);
+			});
+
+			res.status(200).json(newPost);
+		} else {
+			res.status(403).json({ message: 'You have already left a review!' });
+		}
+	}
+);
 module.exports = router;

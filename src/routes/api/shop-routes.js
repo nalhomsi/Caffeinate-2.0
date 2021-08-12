@@ -1,15 +1,12 @@
 const express = require('express');
 const { Review, Shop, User } = require('../../models/index');
 const router = express.Router();
-const sequelize = require('../../config/connection');
 const { Op } = require('sequelize');
 
 // Get all Shops
 router.get('/', (req, res) => {
 	// Find all Shops...
 	Shop.findAll({
-		// Hide shopId
-		attributes: { exclude: ['shopId'] },
 		include: [
 			{
 				// Only return rating, body and date
@@ -42,8 +39,6 @@ router.get('/', (req, res) => {
 router.get('/:name', (req, res) => {
 	// Find all shops
 	Shop.findAll({
-		// Hide shopId
-		attributes: { exclude: ['shopId'] },
 		// Include shop reviews
 		include: [
 			{

@@ -78,7 +78,12 @@ router.get(
 	'/test',
 	passport.authenticate('jwt', { session: false }),
 	(req, res) => {
-		res.status(200).json({ message: 'Authorized' }).send();
+		const authHeaders = req.header('authorization').split(' ')[1];
+		const user = req.user;
+		res
+			.status(200)
+			.json({ message: 'Authorized', header: authHeaders, user: user })
+			.send();
 	}
 );
 

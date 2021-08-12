@@ -9,7 +9,7 @@ router.post('/token', async (req, res) => {
 	const refreshToken = req.body.token;
 
 	// Finds the user where the refresh token matchces
-	const userRefreshToken = await User.findOne({
+	const dbRefreshToken = await User.findOne({
 		where: { refreshToken },
 	}).catch((err) => {
 		console.log(err);
@@ -19,7 +19,7 @@ router.post('/token', async (req, res) => {
 	if (refreshToken == null) return res.sendStatus(401);
 
 	// If the user is missing a refresh token in the DB, send 403
-	if (userRefreshToken == null) return res.sendStatus(403);
+	if (dbRefreshToken == null) return res.sendStatus(403);
 
 	// If the user has a refresh token, verify that it is still valid
 	jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
@@ -45,15 +45,15 @@ router.delete('/logout', async (req, res) => {
 	const refreshToken = req.body.token;
 
 	// Finds the user where the refresh token matches
-	const userRefreshToken = await User.findOne({
+	const dbRefreshToken = await User.findOne({
 		where: { refreshToken },
 	}).catch((err) => {
 		console.log(err);
 	});
 
 	// Sets the token to null
-	userRefreshToken.refreshToken = null;
-	await userRefreshToken.save();
+	dbRefreshToken.refreshToken = null;
+	await dbRefreshToken.save();
 	res.sendStatus(204);
 });
 
