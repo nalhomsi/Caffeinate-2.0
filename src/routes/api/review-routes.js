@@ -28,6 +28,7 @@ router.get('/', (req, res) => {
 		});
 });
 
+// Get reviews from username
 router.get('/:username', (req, res) => {
 	User.findAll({
 		attributes: {
