@@ -1,16 +1,18 @@
 // import models
-const Review = require("./review");
-const Shop = require("./shop");
-const User = require("./user");
+const Review = require('./review');
+const Shop = require('./shop');
+const User = require('./user');
 
-// Reviews belongTo Users
-Review.belongsTo(User, {foreignKey: 'id'});
+// Users have many Reviews
+User.hasMany(Review, { foreignKey: 'userId', sourceKey: 'userId' });
+Review.belongsTo(User, { foreignKey: 'userId', targetKey: 'userId' });
 
 // Shops have many Reviews
-Shop.hasMany(Review, {foreignKey: 'id', as: 'reviews'});
+Shop.hasMany(Review, { foreignKey: 'shopId', sourceKey: 'shopId' });
+Review.belongsTo(Shop, { foreignKey: 'shopId', targetKey: 'shopId' });
 
 module.exports = {
-    Review,
-    Shop,
-    User,
+	Review,
+	Shop,
+	User,
 };

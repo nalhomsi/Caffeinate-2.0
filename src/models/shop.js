@@ -6,7 +6,7 @@ class Shop extends Model {}
 Shop.init(
 	{
 		// id column
-		id: {
+		shopId: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
 			allowNull: false,
@@ -29,7 +29,7 @@ Shop.init(
 		},
 		// latitude column
 		latitude: {
-			type: DataTypes.DECIMAL,
+			type: DataTypes.DECIMAL(8, 6),
 			validate: {
 				min: -90,
 				max: 90,
@@ -37,7 +37,7 @@ Shop.init(
 		},
 		// longitude column
 		longitude: {
-			type: DataTypes.DECIMAL,
+			type: DataTypes.DECIMAL(9, 6),
 			validate: {
 				min: -180,
 				max: 180,

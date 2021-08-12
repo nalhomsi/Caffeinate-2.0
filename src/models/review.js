@@ -8,7 +8,7 @@ class Review extends Model {}
 Review.init(
 	{
 		// id column
-		id: {
+		reviewId: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			primaryKey: true,
@@ -28,20 +28,14 @@ Review.init(
 			type: DataTypes.TEXT('long'),
 		},
 		// user column, ref user id
-		user: {
+		userId: {
 			type: DataTypes.INTEGER,
-			references: {
-				model: User,
-				key: 'id',
-			},
+			allowNull: false,
 		},
 		// shop column, ref shop id
-		shop: {
+		shopId: {
 			type: DataTypes.INTEGER,
-			references: {
-				model: Shop,
-				key: 'id',
-			},
+			allowNull: false,
 		},
 		// date column
 		date: {
