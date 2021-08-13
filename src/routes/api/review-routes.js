@@ -86,11 +86,11 @@ router.post(
 		});
 
 		if (!existingReview) {
-			const newPost = await Review.create(review).catch((err) => {
+			await Review.create(review).catch((err) => {
 				console.log(err);
 			});
 
-			res.status(200).json(newPost);
+			res.status(200).json({ message: 'Successfully posted review' });
 		} else {
 			res.status(403).json({ message: 'You have already left a review!' });
 		}
