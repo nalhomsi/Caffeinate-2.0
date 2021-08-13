@@ -51,8 +51,9 @@ router.delete('/logout', async (req, res) => {
 		console.log(err);
 	});
 
-	// Sets the token to null
-	dbRefreshToken.refreshToken = null;
+	if (!dbRefreshToken)
+		// Sets the token to null
+		dbRefreshToken.refreshToken = null;
 	await dbRefreshToken.save();
 	res.sendStatus(204);
 });
