@@ -11,6 +11,11 @@ router.post('/login', async (req, res) => {
 	const email = req.body.email;
 	const password = req.body.password;
 
+	// Verify that email and password are in the request
+	if (!email || !password) {
+		res.status(400).json({ message: 'Malformed request ' });
+		return;
+	}
 	// Attempt to pull user from DB
 	const userWithEmail = await User.findOne({ where: { email } }).catch(
 		(err) => {

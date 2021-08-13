@@ -74,6 +74,11 @@ router.post(
 			shopId: shopId,
 		};
 
+		if (!userRating || !userId || !shopId) {
+			res.status(400).json({ message: 'Malformed Request' });
+			return;
+		}
+
 		const existingReview = await Review.findOne({
 			where: {
 				[Op.and]: [{ userId: userId }, { shopId: shopId }],

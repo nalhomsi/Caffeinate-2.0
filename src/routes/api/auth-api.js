@@ -16,10 +16,12 @@ router.post('/token', async (req, res) => {
 	});
 
 	// If the token is missing in the response, send 401
-	if (refreshToken == null) return res.sendStatus(401);
+	if (refreshToken == null)
+		return res.status(401).json({ message: 'Token is missing' });
 
 	// If the user is missing a refresh token in the DB, send 403
-	if (dbRefreshToken == null) return res.sendStatus(403);
+	if (dbRefreshToken == null)
+		return res.status(403).json({ message: 'Token is invalid' });
 
 	// If the user has a refresh token, verify that it is still valid
 	jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
@@ -44,18 +46,35 @@ router.delete('/logout', async (req, res) => {
 	// Gets the refresh token from the body of the request
 	const refreshToken = req.body.token;
 
+	console.log(refreshToken);
+	// Check to see if the token is present in the request
+
+	if (refreshToken == null) {
+		res.status(400).json({ message: 'Token is not present in request' });
+		return;
+	}
+
 	// Finds the user where the refresh token matches
 	const dbRefreshToken = await User.findOne({
-		where: { refreshToken },
+		where: { refreshToken: refreshToken },
 	}).catch((err) => {
 		console.log(err);
 	});
 
-	if (!dbRefreshToken)
+	// Check to see if anything was returned in the query
+	if (!dbRefreshToken) {
+		res.status(401).json({ message: 'Token does not exist' });
+		return;
+	}
+	try {
 		// Sets the token to null
 		dbRefreshToken.refreshToken = null;
-	await dbRefreshToken.save();
-	res.sendStatus(204);
+		dbRefreshToken.save();
+		res.status(201).json({ message: 'Successfully logged out' });
+		return;
+	} catch (err) {
+		console.log(err);
+	}
 });
 
 module.exports = router;
