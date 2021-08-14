@@ -40,7 +40,9 @@ router.post('/register', async (req, res) => {
 
 			const savedUser = User.create(newUser)
 				.then((savedUser) => {
-					res.status(200).json({ message: 'Thanks for registering!' });
+					res
+						.status(200)
+						.json({ message: 'Thanks for registering ' + username });
 				})
 				.catch((err) => {
 					console.log(err);

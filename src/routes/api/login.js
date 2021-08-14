@@ -60,12 +60,14 @@ router.post('/login', async (req, res) => {
 				userWithEmail.save();
 
 				res
+					.cookie('caffRefreshToken', refreshToken, {
+						maxAge: process.env.REFRESH_TOKEN_LIFE,
+					})
 					.status(200)
 					.json({
 						message: 'Successfully signed in',
 						userId: userWithEmail.userId,
 						accessToken: accessToken,
-						refreshToken: refreshToken,
 					})
 					.send();
 			} else {
@@ -85,10 +87,7 @@ router.get(
 	(req, res) => {
 		const authHeaders = req.header('authorization').split(' ')[1];
 		const user = req.user;
-		res
-			.status(200)
-			.json({ message: 'Authorized', header: authHeaders, user: user })
-			.send();
+		res.status(200).json({ message: 'Authorized', header: authHeaders }).send();
 	}
 );
 

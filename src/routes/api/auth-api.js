@@ -6,7 +6,10 @@ const router = express.Router();
 // Route used to validate refresh token in case of an expired access token and provide a new access token if necessary
 router.post('/token', async (req, res) => {
 	// Gets the refresh token from the body of the request
-	const refreshToken = req.body.token;
+	//const refreshToken = req.body.token;
+
+	// Gets refresh token from the cookies of the request
+	const refreshToken = req.cookies.caffRefreshToken;
 
 	// Finds the user where the refresh token matchces
 	const dbRefreshToken = await User.findOne({
@@ -44,9 +47,11 @@ router.post('/token', async (req, res) => {
 // Route use to remove the user's refresh token from the database, will require front end to remove the access token
 router.delete('/logout', async (req, res) => {
 	// Gets the refresh token from the body of the request
-	const refreshToken = req.body.token;
+	//const refreshToken = req.body.token;
 
-	console.log(refreshToken);
+	// Gets refresh token from the cookies of the request
+	const refreshToken = req.cookies.caffRefreshToken;
+
 	// Check to see if the token is present in the request
 
 	if (refreshToken == null) {
@@ -70,7 +75,11 @@ router.delete('/logout', async (req, res) => {
 		// Sets the token to null
 		dbRefreshToken.refreshToken = null;
 		dbRefreshToken.save();
-		res.status(201).json({ message: 'Successfully logged out' });
+		res
+			// Sets value of stored cookie to null, forcing user to have to sign in
+			.clearCookie('caffRefreshToken', refreshToken)
+			.status(201)
+			.json({ message: 'Successfully logged out' });
 		return;
 	} catch (err) {
 		console.log(err);
