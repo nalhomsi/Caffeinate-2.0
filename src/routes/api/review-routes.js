@@ -4,15 +4,13 @@ const router = express.Router();
 const passport = require('passport');
 require('../../auth/passport')(passport);
 const { Op } = require('sequelize');
-var filter = require('../api/register');
 const toxicity = require('@tensorflow-models/toxicity');
 
 // Function to check and see if a message is considered toxic
 const isToxic = async (model, message) => {
 	const predictions = await model.classify(message);
-	console.log(predictions);
 	const toxicPredictions = predictions.filter((p) => p.results[0].match);
-	console.log(toxicPredictions);
+
 	if (toxicPredictions.length > 0) {
 		return true;
 	}
@@ -80,12 +78,17 @@ router.post(
 		const shopId = req.body.shopId;
 		const userId = req.user.userId;
 
+		// Load the toxicity model
+		model = await toxicity.load();
+
 		if (!userRating || !userId || !shopId) {
 			res.status(400).json({ message: 'Malformed Request' });
 			return;
 		}
 
-		if (isToxic(model, postBody)) {
+		// Check to see if the review contains toxic remarks
+		const toxicResults = await isToxic(model, postBody);
+		if (toxicResults) {
 			// If it does, do not allow user to register
 			res
 				.status(409)

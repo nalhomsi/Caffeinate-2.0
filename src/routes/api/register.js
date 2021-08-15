@@ -26,7 +26,7 @@ router.post('/register', async (req, res) => {
 	}
 
 	// Load the toxicity model
-	model = await toxicity.load();
+	const model = await toxicity.load();
 
 	const saltRounds = 10;
 
