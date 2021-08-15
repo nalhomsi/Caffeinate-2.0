@@ -2,8 +2,18 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const { User } = require('../../models');
 const { Op } = require('sequelize');
-
+const toxicity = require('@tensorflow-models/toxicity');
 const router = express.Router();
+
+// Function to check and see if a message is considered toxic
+const isToxic = async (model, message) => {
+	const predictions = await model.classify(message);
+	const toxicPredictions = predictions.filter((p) => p.results[0].match);
+
+	if (toxicPredictions.length > 0) {
+		return true;
+	}
+};
 
 // Route used to register a user for the first time
 router.post('/register', async (req, res) => {
@@ -14,6 +24,9 @@ router.post('/register', async (req, res) => {
 		res.status(400).json({ message: 'Malformed request' });
 		return;
 	}
+
+	// Load the toxicity model
+	model = await toxicity.load();
 
 	const saltRounds = 10;
 
@@ -33,25 +46,35 @@ router.post('/register', async (req, res) => {
 			.json({ message: 'User with email/username already exists!' });
 	}
 
-	bcrypt.genSalt(saltRounds, function (err, salt) {
-		bcrypt.hash(password, salt, function (err, hashedPassword) {
-			// Create new user
-			const newUser = { username, email, hashedPassword };
+	// Check to see if the username has toxic elements
+	const toxicTest = await isToxic(model, username);
+	if (toxicTest) {
+		// If it does, do not allow user to register
+		res
+			.status(409)
+			.json({ message: 'Profanity detected, please adjust accordingly' });
+		return;
+	} else {
+		bcrypt.genSalt(saltRounds, async function (err, salt) {
+			await bcrypt.hash(password, salt, async function (err, hashedPassword) {
+				// Create new user
+				const newUser = { username, email, hashedPassword };
 
-			const savedUser = User.create(newUser)
-				.then((savedUser) => {
-					res
-						.status(200)
-						.json({ message: 'Thanks for registering ' + username });
-				})
-				.catch((err) => {
-					console.log(err);
-					return res
-						.status(400)
-						.json(err.errors.map((message) => message.message));
-				});
+				const savedUser = await User.create(newUser)
+					.then((savedUser) => {
+						res
+							.status(200)
+							.json({ message: 'Thanks for registering ' + username });
+					})
+					.catch((err) => {
+						console.log(err);
+						return res
+							.status(400)
+							.json(err.errors.map((message) => message.message));
+					});
+			});
 		});
-	});
+	}
 });
 
 module.exports = router;
