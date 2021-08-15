@@ -4,6 +4,17 @@ const router = express.Router();
 const passport = require('passport');
 require('../../auth/passport')(passport);
 const { Op } = require('sequelize');
+const toxicity = require('@tensorflow-models/toxicity');
+
+// Function to check and see if a message is considered toxic
+const isToxic = async (model, message) => {
+	const predictions = await model.classify(message);
+	const toxicPredictions = predictions.filter((p) => p.results[0].match);
+
+	if (toxicPredictions.length > 0) {
+		return true;
+	}
+};
 
 // Get all Reviews
 router.get('/', (req, res) => {
@@ -67,17 +78,30 @@ router.post(
 		const shopId = req.body.shopId;
 		const userId = req.user.userId;
 
+		// Load the toxicity model
+		model = await toxicity.load();
+
+		if (!userRating || !userId || !shopId) {
+			res.status(400).json({ message: 'Malformed Request' });
+			return;
+		}
+
+		// Check to see if the review contains toxic remarks
+		const toxicResults = await isToxic(model, postBody);
+		if (toxicResults) {
+			// If it does, do not allow user to register
+			res
+				.status(409)
+				.json({ message: 'Profanity detected, please adjust accordingly' });
+			return;
+		}
+
 		const review = {
 			rating: userRating,
 			body: postBody,
 			userId: userId,
 			shopId: shopId,
 		};
-
-		if (!userRating || !userId || !shopId) {
-			res.status(400).json({ message: 'Malformed Request' });
-			return;
-		}
 
 		const existingReview = await Review.findOne({
 			where: {
