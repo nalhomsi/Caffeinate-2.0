@@ -4,6 +4,9 @@ Tired of Starbucks? Want to explore the culture of your city? Caffeinate the Cit
 
 The motivation of this project is to push local businesses, especially in the time of covid when local businesses are struggling. They may not have the revenue for advertisement the way a corporate coffee chain would so our app draws attention to them.
 
+![123882242-5f842080-d914-11eb-81c1-c6db5b546277](https://user-images.githubusercontent.com/80538653/129638553-36d504be-64b3-4da4-80c4-cb22a6081bab.jpg)
+
+
 # Caffeinate-2.0 API Calls
 
 ## Get Statements
