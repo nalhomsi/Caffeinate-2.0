@@ -28,6 +28,7 @@
 		"jsonwebtoken": "^8.5.1",
 		"morgan": "^1.10.0",
 		"mysql2": "^2.3.0",
+		"node": "^16.6.1",
 		"passport": "^0.4.1",
 		"passport-jwt": "^4.0.0",
 		"python": "0.0.4",
