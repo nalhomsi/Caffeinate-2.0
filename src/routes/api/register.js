@@ -2,7 +2,6 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const { User } = require('../../models');
 const { Op } = require('sequelize');
-const toxicity = require('@tensorflow-models/toxicity');
 const router = express.Router();
 
 // Function to check and see if a message is considered toxic
