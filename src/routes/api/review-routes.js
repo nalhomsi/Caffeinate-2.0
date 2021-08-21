@@ -4,6 +4,7 @@ const router = express.Router();
 const passport = require('passport');
 require('../../auth/passport')(passport);
 const { Op } = require('sequelize');
+const toxicity = require('@tensorflow-models/toxicity');
 
 // Function to check and see if a message is considered toxic
 const isToxic = async (model, message) => {

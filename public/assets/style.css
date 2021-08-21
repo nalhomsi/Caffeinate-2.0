@@ -1,0 +1,216 @@
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	color: white;
+	background-color: #e4dcd1;
+	background-image: url('oldgrain.jpg');
+
+	box-sizing: border-box;
+}
+
+.label {
+	color: white;
+}
+
+.bg-img {
+	background-image: url('coffee1.jpg');
+	width: 100%;
+	min-height: 315px;
+	border: 2px solid rgb(68, 44, 9);
+	border-radius: 15px;
+	border-bottom: 5px solid rgb(36, 23, 5);
+	position: relative;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+/* Needed to position the navbar */
+
+.navbar {
+	background-color: transparent;
+}
+
+.navbar-start {
+	width: 100%;
+	height: auto;
+}
+
+/* The navbar */
+.topnav {
+	overflow: auto;
+	background-color: rgb(32, 20, 2);
+	border-radius: 10px;
+	display: flex;
+	justify-content: center;
+}
+
+/* Navbar links */
+.topnav a {
+	float: left;
+	color: #f2f2f2;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+	font-size: 17px;
+}
+.topnav a:hover {
+	background-color: rgb(68, 44, 9);
+	color: #e4dcd1;
+}
+/*scrollbar styling*/
+/* width */
+::-webkit-scrollbar {
+	width: 12px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 4px rgb(68, 44, 9);
+	border-radius: 5px;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: rgb(68, 44, 9);
+	border-radius: 5px;
+}
+
+.footer {
+	position: inherit;
+	text-align: center;
+	bottom: 0px;
+	max-width: 100%;
+	height: 20px; /* Height of the footer */
+	background-color: rgb(68, 44, 9);
+}
+
+#map-section,
+#directions,
+#login-section,
+#register-section,
+#review-section,
+#search-review-section,
+#post-review-section {
+	width: 80%;
+	max-width: 80%;
+	margin: auto;
+	text-align: center;
+	padding: 15px 15px;
+	font-size: 20px;
+	border: 3px solid rgb(32, 20, 2);
+	border-radius: 15px;
+	background-color: rgba(109, 109, 108, 0.733);
+}
+
+#directions {
+	text-align: inherit;
+}
+#map-section > iframe {
+	height: 100%;
+	width: 100%;
+}
+
+.shopbtns {
+	white-space: normal;
+	word-wrap: break-word;
+	height: auto;
+}
+
+/* Style inputs with type="text", select elements and textareas */
+input[type='text'],
+select,
+textarea {
+	width: 100%; /* Full width */
+	align-items: center;
+	padding: 20px; /* Some padding */
+	border: 1px solid #ccc; /* Gray border */
+	border-radius: 4px; /* Rounded borders */
+	box-sizing: border-box; /* Make sure that padding and width stays in place */
+	margin-top: 6px; /* Add a top margin */
+	margin-bottom: 16px; /* Bottom margin */
+	resize: vertical; /* Allow the user to vertically resize the textarea (not horizontally) */
+}
+/* Style the submit button with a specific background color etc */
+input[type='submit'] {
+	background-color: rgb(68, 44, 9);
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	height: 40px;
+	width: 70px;
+}
+
+/* When moving the mouse over the submit button, add a darker green color */
+input[type='submit']:hover {
+	background-color: #ebdb83;
+}
+/* Add a background color and some padding around the form */
+.container {
+	border-radius: 5px;
+	padding: 20px;
+}
+
+.rating {
+	display: inline-block;
+	position: relative;
+	height: 50px;
+	line-height: 50px;
+	font-size: 50px;
+}
+
+.rating label {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	cursor: pointer;
+}
+
+.rating label:last-child {
+	position: static;
+}
+
+.rating label:nth-child(1) {
+	z-index: 5;
+}
+
+.rating label:nth-child(2) {
+	z-index: 4;
+}
+
+.rating label:nth-child(3) {
+	z-index: 3;
+}
+
+.rating label:nth-child(4) {
+	z-index: 2;
+}
+
+.rating label:nth-child(5) {
+	z-index: 1;
+}
+
+.rating label input {
+	position: absolute;
+	top: 0;
+	left: 0;
+	opacity: 0;
+}
+
+.rating label .icon {
+	float: left;
+	color: transparent;
+}
+
+.rating label:last-child .icon {
+	color: #000;
+}
+
+.rating:not(:hover) label input:checked ~ .icon,
+.rating:hover label:hover input ~ .icon {
+	color: #09f;
+}
+
+.rating label input:focus:not(:checked) ~ .icon:last-child {
+	color: #000;
+	text-shadow: 0 0 5px #09f;
+}

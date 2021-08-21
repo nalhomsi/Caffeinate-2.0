@@ -18,20 +18,21 @@
 	},
 	"license": "MIT",
 	"dependencies": {
+		"@tensorflow-models/toxicity": "^1.2.2",
+		"@tensorflow/tfjs-node": "^3.8.0",
 		"bcrypt": "^5.0.1",
 		"body-parser": "^1.19.0",
 		"cookie-parser": "^1.4.5",
 		"cors": "^2.8.5",
 		"dotenv": "^10.0.0",
 		"express": "^4.17.1",
+		"express-handlebars": "^5.3.3",
 		"helmet": "^4.6.0",
 		"jsonwebtoken": "^8.5.1",
 		"morgan": "^1.10.0",
 		"mysql2": "^2.3.0",
-		"node": "^16.6.1",
 		"passport": "^0.4.1",
 		"passport-jwt": "^4.0.0",
-		"python": "0.0.4",
 		"sequelize": "^6.6.5"
 	},
 	"devDependencies": {
